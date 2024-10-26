@@ -47,18 +47,6 @@ app.secret_key = 'your_secret_key'  # セッションを安全に使うための
 line_bot_api = get_line_bot_client()
 handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET', None))
 
-# REMIND_INTERVAL_MIN分ごとにremind_closest_eventを実行するよう指示
-scheduler = BackgroundScheduler(daemon=True)  # background thread
-logger.info('schedulerジョブを設定します...')
-logger.debug(f'REMIND_INTERVAL_MIN: {REMIND_INTERVAL_MIN}')
-logger.debug(f'REMIND_SOONER_THAN_HOURS: {REMIND_SOONER_THAN_HOURS}')
-scheduler.add_job(
-    func=remind_closest_event,
-    trigger='interval',
-    args=[line_bot_api],
-    minutes=REMIND_INTERVAL_MIN
-)
-scheduler.start()
 
 @app.route('/')
 def index():
